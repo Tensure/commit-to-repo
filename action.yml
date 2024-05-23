@@ -1,6 +1,13 @@
 name: 'Commit To Repo'
 description: 'Commits local files specified to a repository.'
 inputs:
+  branch:
+    description: 'An optional repository branch to checkout and commit to. Will use whatever the default branch of the destination repo is, if not specified.'
+    required: false
+    default: ''
+  files:
+    description: 'A list of local files to commit.'
+    required: true
   github-pat:
     description: 'A custom token to use.'
     required: false
@@ -12,15 +19,8 @@ inputs:
   github-app-private-key:
     description: 'The private key for a Github App. Do not provide if github-pat-token is provided.'
     required: false
-  branch:
-    description: 'An optional repository branch to checkout and commit to. Will use whatever the default branch of the destination repo is, if not specified.'
-    required: false
-    default: ''
   github-repository:
     description: 'The Github repository in <owner>/<repository> format. Credentials provided must have access.'
-    required: true
-  files:
-    description: 'A list of local files to commit.'
     required: true
 runs:
   using: "composite"
@@ -57,10 +57,22 @@ runs:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
+        branch: ${{ inputs.branch }}
         token: ${{ steps.output-token.outputs.TOKEN }}
         repository: ${{ inputs.github-repository }}
         persist-credentials: false
+        path: commit-this-repo
 
     - name: List files
       shell: bash
-      run: ls -latr
+      working-directory: commit-this-repo
+      run: |
+        FILES="";
+        while IFS= read -r line; do
+
+          echo "File to copy: ${line};
+          cp ../${line} ./${line}
+
+        done <<< "${{ inputs.files }}"
+
+        ls -latr

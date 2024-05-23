@@ -39,7 +39,7 @@ runs:
       with:
         app-id: ${{ inputs.github-app-id }}
         private-key: ${{ inputs.github-app-private-key }}
-        repository: ${{ inputs.github-repository }}
+        repositories: ${{ inputs.github-repository }}
 
     - name: Output App Token To Environment
       if: ${{ inputs.github-app-id != '' && inputs.github-app-private-key != '' }}

@@ -71,10 +71,9 @@ runs:
       shell: bash
       working-directory: commit-this-repo
       run: |
-        FILES="";
         while IFS= read -r line; do
 
-          echo "File to copy: ${line};
+          echo "File to copy: ${line}";
           cp ../${line} ./${line}
 
         done <<< '${{ inputs.files }}'

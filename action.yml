@@ -19,8 +19,11 @@ inputs:
   github-app-private-key:
     description: 'The private key for a Github App. Do not provide if github-pat-token is provided.'
     required: false
+  github-owner:
+    description: 'The Github owner of the repository.'
+    required: true
   github-repository:
-    description: 'The Github repository in <owner>/<repository> format. Credentials provided must have access.'
+    description: 'The Github repository to commit to.'
     required: true
 runs:
   using: "composite"
@@ -39,6 +42,7 @@ runs:
       with:
         app-id: ${{ inputs.github-app-id }}
         private-key: ${{ inputs.github-app-private-key }}
+        owner: ${{ inputs.github-owner }}
         repositories: ${{ inputs.github-repository }}
 
     - name: Output App Token To Environment
@@ -49,7 +53,7 @@ runs:
         echo "GITHUB_TOKEN=${{ steps.app-token.outputs.token }}" >> ${GITHUB_ENV}
 
     - name: Save Environment Variable As Output
-      id: output-token
+      id: output-values
       shell: bash
       run: |
         echo "TOKEN=${GITHUB_TOKEN}" >> ${GITHUB_OUTPUT}
@@ -58,7 +62,7 @@ runs:
       uses: actions/checkout@v4
       with:
         ref: ${{ inputs.branch }}
-        token: ${{ steps.output-token.outputs.TOKEN }}
+        token: ${{ steps.output-values.outputs.TOKEN }}
         repository: ${{ inputs.github-repository }}
         persist-credentials: false
         path: commit-this-repo

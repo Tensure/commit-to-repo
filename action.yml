@@ -77,6 +77,6 @@ runs:
           echo "File to copy: ${line};
           cp ../${line} ./${line}
 
-        done <<< "${{ inputs.files }}"
+        done <<< '${{ inputs.files }}'
 
         ls -latr

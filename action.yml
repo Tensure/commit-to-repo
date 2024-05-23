@@ -56,20 +56,11 @@ runs:
         echo "Attempting to use Github App credentials..."
         echo "GITHUB_TOKEN=${{ steps.app-token.outputs.token }}" >> ${GITHUB_ENV}
 
-    - name: Save Environment Variable As Output
-      id: output-values
-      shell: bash
-      run: |
-        echo "TOKEN=${GITHUB_TOKEN}" >> ${GITHUB_OUTPUT}
-
-    - name: List files
-      shell: bash
-      run: |
-        ls -latr
-
     - name: Clone Destination Repo, Add, & Commit Files
       shell: bash
       run: |
+
+        ls -latr
 
         # set variables
         REPO="${{ inputs.github-owner }}/${{ inputs.github-repository }}"
@@ -80,7 +71,7 @@ runs:
 
         # make sure the destination directory doesn't exist & clone the repo
         rm -rf ${{ inputs.github-repository }}
-        git clone ${BRANCH} https://${{ steps.output-values.outputs.TOKEN }}@github.com/${REPO}.git
+        git clone ${BRANCH} https://${GITHUB_TOKEN}:@github.com/${REPO}.git
 
         # change directory to repo created
         cd ${{ inputs.github-repository }}

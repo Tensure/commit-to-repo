@@ -71,7 +71,7 @@ runs:
 
         # make sure the destination directory doesn't exist & clone the repo
         rm -rf ${{ inputs.github-repository }}
-        git clone ${BRANCH} https://${GITHUB_TOKEN}:@github.com/${REPO}.git
+        git clone ${BRANCH} https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git
 
         # change directory to repo created
         cd ${{ inputs.github-repository }}

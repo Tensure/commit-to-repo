@@ -57,7 +57,7 @@ runs:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
-        branch: ${{ inputs.branch }}
+        ref: ${{ inputs.branch }}
         token: ${{ steps.output-token.outputs.TOKEN }}
         repository: ${{ inputs.github-repository }}
         persist-credentials: false

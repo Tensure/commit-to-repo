@@ -1,7 +1,7 @@
 name: 'Commit To Repo'
 description: 'Commits local files specified to a repository.'
 inputs:
-  github-pat-token:
+  github-pat:
     description: 'A custom token to use.'
     required: false
     default: ''
@@ -26,11 +26,11 @@ runs:
   using: "composite"
   steps:
     - name: Output PAT To Environment
-      if: ${{ inputs.github-pat-token != '' }}
+      if: ${{ inputs.github-pat != '' }}
       shell: bash
       run: |
         echo "Attempting to use PAT credential...";
-        echo "GITHUB_TOKEN=${{ inputs.github-pat-token }}" >> ${GITHUB_ENV}
+        echo "GITHUB_TOKEN=${{ inputs.github-pat }}" >> ${GITHUB_ENV}
 
     - name: Get Token From App
       if: ${{ inputs.github-app-id != '' && inputs.github-app-private-key != '' }}

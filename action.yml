@@ -25,6 +25,10 @@ inputs:
   github-repository:
     description: 'The Github repository to commit to.'
     required: true
+  path:
+    description: 'An optional path in the destination repository to place th efiles.'
+    required: false
+    default: '.'
 runs:
   using: "composite"
   steps:
@@ -63,34 +67,38 @@ runs:
       run: |
         ls -latr
 
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ inputs.branch }}
-        token: ${{ steps.output-values.outputs.TOKEN }}
-        repository: ${{ inputs.github-owner }}/${{ inputs.github-repository }}
-        persist-credentials: false
-        path: commit-this-repo
-
-    - name: List files
-      shell: bash
-      run: |
-        ls -latr
-
-    - name: Copy files
+    - name: Clone Destination Repo, Add, & Commit Files
       shell: bash
       working-directory: commit-this-repo
       run: |
+
+        # set variables
+        REPO="${{ inputs.github-owner }}/${{ inputs.github-repository }}"
+        BRANCH=""
+        if [[ -z "${{ inputs.branch }}" ]] {
+          BRANCH="-b ${{ inputs.branch }}";
+        }
+
+        # make sure the destination directory doesn't exist & clone the repo
+        rm -rf ${{ inputs.github-repository }}
+        git clone ${BRANCH} https://${{ steps.output-values.outputs.TOKEN }}@github.com/${REPO}.git
+
+        # change directory to repo created
+        cd ${{ inputs.github-repository }}
+
+        # set config values
         git config user.name "commit-to-repo"
         git config user.email "support@tensure.io"
 
+        # make sure path exists
+        mkdir -p "${{ inputs.path }}"
+
+        # loop over files
         while IFS= read -r FILE; do
-
-          echo "Adding file: ${FILE}";
-          cp ../${FILE} ./${FILE}
+          cp ../${FILE} ${{ inputs.path }}/${FILE}
           git add ${FILE}
-
         done <<< '${{ inputs.files }}'
 
+        # commit and push
         git commit -m "Manifest patched from ${{ github.ref }}"
-        git push
+        git push origin

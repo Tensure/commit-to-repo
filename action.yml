@@ -58,6 +58,11 @@ runs:
       run: |
         echo "TOKEN=${GITHUB_TOKEN}" >> ${GITHUB_OUTPUT}
 
+    - name: List files
+      shell: bash
+      run: |
+        ls -latr
+
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
@@ -69,7 +74,6 @@ runs:
 
     - name: List files
       shell: bash
-      working-directory: commit-this-repo
       run: |
         ls -latr
 

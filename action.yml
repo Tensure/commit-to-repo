@@ -71,6 +71,12 @@ runs:
       shell: bash
       working-directory: commit-this-repo
       run: |
+        ls -latr
+
+    - name: Copy files
+      shell: bash
+      working-directory: commit-this-repo
+      run: |
         while IFS= read -r line; do
 
           echo "File to copy: ${line}";

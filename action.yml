@@ -63,7 +63,7 @@ runs:
       with:
         ref: ${{ inputs.branch }}
         token: ${{ steps.output-values.outputs.TOKEN }}
-        repository: ${{ inputs.github-repository }}
+        repository: ${{ inputs.github-owner }}/${{ inputs.github-repository }}
         persist-credentials: false
         path: commit-this-repo
 

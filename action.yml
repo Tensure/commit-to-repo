@@ -81,6 +81,9 @@ runs:
       shell: bash
       working-directory: commit-this-repo
       run: |
+        git config --global user.name "commit-to-repo"
+        git config --global user.email "support@tensure.io"
+
         while IFS= read -r FILE; do
 
           echo "Adding file: ${FILE}";

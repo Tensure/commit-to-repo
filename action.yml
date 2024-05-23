@@ -69,7 +69,6 @@ runs:
 
     - name: Clone Destination Repo, Add, & Commit Files
       shell: bash
-      working-directory: commit-this-repo
       run: |
 
         # set variables

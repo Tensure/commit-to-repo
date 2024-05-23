@@ -1,0 +1,66 @@
+name: 'Commit To Repo'
+description: 'Commits local files specified to a repository.'
+inputs:
+  github-pat-token:
+    description: 'A custom token to use.'
+    required: false
+    default: ''
+  github-app-id:
+    description: 'The app ID of a Github App. Do not provide if github-pat-token is provided.'
+    required: false
+    default: ''
+  github-app-private-key:
+    description: 'The private key for a Github App. Do not provide if github-pat-token is provided.'
+    required: false
+  branch:
+    description: 'An optional repository branch to checkout and commit to. Will use whatever the default branch of the destination repo is, if not specified.'
+    required: false
+    default: ''
+  github-repository:
+    description: 'The Github repository in <owner>/<repository> format. Credentials provided must have access.'
+    required: true
+  files:
+    description: 'A list of local files to commit.'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Output PAT To Environment
+      if: ${{ inputs.github-pat-token != '' }}
+      shell: bash
+      run: |
+        echo "Attempting to use PAT credential...";
+        echo "GITHUB_TOKEN=${{ inputs.github-pat-token }}" >> ${GITHUB_ENV}
+
+    - name: Get Token From App
+      if: ${{ inputs.github-app-id != '' && inputs.github-app-private-key != '' }}
+      id: app-token
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.github-app-id }}
+        private-key: ${{ inputs.github-app-private-key }}
+        repository: ${{ inputs.github-repository }}
+
+    - name: Output App Token To Environment
+      if: ${{ inputs.github-app-id != '' && inputs.github-app-private-key != '' }}
+      shell: bash
+      run: |
+        echo "Attempting to use Github App credentials..."
+        echo "GITHUB_TOKEN=${{ steps.app-token.outputs.token }}" >> ${GITHUB_ENV}
+
+    - name: Save Environment Variable As Output
+      id: output-token
+      shell: bash
+      run: |
+        echo "TOKEN=${GITHUB_TOKEN}" >> ${GITHUB_OUTPUT}
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ steps.output-token.outputs.TOKEN }}
+        repository: ${{ inputs.github-repository }}
+        persist-credentials: false
+
+    - name: List files
+      shell: bash
+      run: ls -latr

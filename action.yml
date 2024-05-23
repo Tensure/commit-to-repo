@@ -26,7 +26,7 @@ inputs:
     description: 'The Github repository to commit to.'
     required: true
   path:
-    description: 'An optional path in the destination repository to place th efiles.'
+    description: 'An optional path in the destination repository to place the files.'
     required: false
     default: '.'
 runs:
@@ -74,10 +74,6 @@ runs:
         # change directory to repo created
         cd ${{ inputs.github-repository }}
 
-        # set config values
-        git config user.name "commit-to-repo"
-        git config user.email "support@tensure.io"
-
         # make sure path exists
         mkdir -p "${{ inputs.path }}"
 
@@ -88,5 +84,5 @@ runs:
         done <<< '${{ inputs.files }}'
 
         # commit and push
-        git commit -m "Manifest patched from ${{ github.repository }}:${GITHUB_SHA}"
+        git commit -m "Patched in ${{ github.repository }}:${GITHUB_SHA}"
         git push origin

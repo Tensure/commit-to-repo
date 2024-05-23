@@ -63,7 +63,7 @@ runs:
         # set variables
         REPO="${{ inputs.github-owner }}/${{ inputs.github-repository }}"
         BRANCH=""
-        if [[ -z "${{ inputs.branch }}" ]]; then
+        if [[ ! -z "${{ inputs.branch }}" ]]; then
           BRANCH="-b ${{ inputs.branch }}";
         fi
 
@@ -88,5 +88,5 @@ runs:
         done <<< '${{ inputs.files }}'
 
         # commit and push
-        git commit -m "Manifest patched from ${{ github.ref }}"
+        git commit -m "Manifest patched from ${{ github.repository }}:${GITHUB_SHA}"
         git push origin

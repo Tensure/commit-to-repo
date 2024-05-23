@@ -81,11 +81,13 @@ runs:
       shell: bash
       working-directory: commit-this-repo
       run: |
-        while IFS= read -r line; do
+        while IFS= read -r FILE; do
 
-          echo "File to copy: ${line}";
-          cp ../${line} ./${line}
+          echo "Adding file: ${FILE}";
+          cp ../${FILE} ./${FILE}
+          git add ${FILE}
 
         done <<< '${{ inputs.files }}'
 
-        ls -latr
+        git commit -m "Manifest patched from ${{ github.ref }}"
+        git push

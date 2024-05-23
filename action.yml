@@ -74,9 +74,9 @@ runs:
         # set variables
         REPO="${{ inputs.github-owner }}/${{ inputs.github-repository }}"
         BRANCH=""
-        if [[ -z "${{ inputs.branch }}" ]] {
+        if [[ -z "${{ inputs.branch }}" ]]; then
           BRANCH="-b ${{ inputs.branch }}";
-        }
+        fi
 
         # make sure the destination directory doesn't exist & clone the repo
         rm -rf ${{ inputs.github-repository }}

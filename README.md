@@ -117,7 +117,7 @@ You'll need to:
 ```
 
 ### Github App Instead Of PAT
-If you need to commit files to a different repository but do not want to use a personal access token, than the recommend route is to [create a Github App](https://docs.github.com/en/apps/creating-github-apps). This example won't cover how to create the app or permissions required to give it access to your desintation repository, but will show you how to use the inputs required.
+If you need to commit files to a different repository but do not want to use a personal access token, then the recommend route is to [create a Github App](https://docs.github.com/en/apps/creating-github-apps). This example won't cover how to create the app or permissions required to give it access to your desintation repository, but will show you how to use the inputs required.
 
 Prerequisites to this example require:
 1. [Create the app](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/quickstart), granting it the necessary access to your destination repository. You do not need to enable webhooks or change any of the default settings. You simply need to generate a private key once the app is created and installed on your organization.

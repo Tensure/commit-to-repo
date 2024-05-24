@@ -76,8 +76,8 @@ runs:
         # change directory to repo created
         cd ${{ inputs.github-repository }}
 
-        ls -latr
-        ls -latr ../
+        git config user.email "commit-to-repo@tensure.io"
+        git config user.name "CommitBot"
 
         # make sure path exists
         mkdir -p "${{ inputs.path }}"

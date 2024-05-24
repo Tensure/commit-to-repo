@@ -56,32 +56,42 @@ runs:
         echo "Attempting to use Github App credentials..."
         echo "GITHUB_TOKEN=${{ steps.app-token.outputs.token }}" >> ${GITHUB_ENV}
 
+    - name: Validate Destination Directory Doesn't Exist
+      shell: bash
+      run: |
+        # make sure the destination directory doesn't exist
+        rm -rf ${{ inputs.github-repository }}
+
     - name: Clone Destination Repo
       shell: bash
       run: |
-        # set variables
-        REPO="${{ inputs.github-owner }}/${{ inputs.github-repository }}"
+        # only provide branch if specified
         BRANCH=""
         if [[ ! -z "${{ inputs.branch }}" ]]; then
           BRANCH="-b ${{ inputs.branch }}";
         fi
 
-        # make sure the destination directory doesn't exist & clone the repo
-        rm -rf ${{ inputs.github-repository }}
-        git clone ${BRANCH} https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git
+        # clone the repo
+        git clone ${BRANCH} https://x-access-token:${GITHUB_TOKEN}@github.com/${{ inputs.github-owner }}/${{ inputs.github-repository }}.git
 
-    - name: Add Files
+    - name: Configure Git
       shell: bash
+      working-directory: ${{ inputs.github-repository }}
       run: |
-        # change directory to repo created
-        cd ${{ inputs.github-repository }}
-
         git config user.email "commit-to-repo@tensure.io"
         git config user.name "CommitBot"
 
-        # make sure path exists
+    - name: Validate Destination Path Exists
+      shell: bash
+      working-directory: ${{ inputs.github-repository }}
+      run: |
+        # make sure destination path exists
         mkdir -p "${{ inputs.path }}"
 
+    - name: Add Files Specified
+      shell: bash
+      working-directory: ${{ inputs.github-repository }}
+      run: |
         # loop over files
         while IFS= read -r FILE; do
           cp ../${FILE} ${{ inputs.path }}/${FILE}
@@ -90,6 +100,6 @@ runs:
 
     - name: Commit Changes
       shell: bash
+      working-directory: ${{ inputs.github-repository }}
       run: |
-        git commit -m "Patched in ${{ github.repository }}:${GITHUB_SHA}"
-        git push origin
+        git commit -m "Patched in ${{ github.repository }}:${GITHUB_SHA}" && git push origin

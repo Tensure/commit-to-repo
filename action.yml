@@ -108,4 +108,4 @@ runs:
       working-directory: ${{ inputs.github-repository }}
       run: |
         REPO_LOWER=$(echo "${{ github.repository }}" | awk '{print tolower($0)}')
-        git commit -m "patched in ${REPO_LOWER}@${GITHUB_SHA::7}" && git push origin
+        git diff-index --quiet HEAD || git commit -m "patched in ${REPO_LOWER}@${GITHUB_SHA::7}" && git push origin

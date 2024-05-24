@@ -1,6 +1,12 @@
 # Commit To Repo
 "Commit To Repo" is a [composite action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) for Github Actions workflows that handles committing file changes to another repository of your choosing. This was originally developed to handle Kubernetes manifest changes for an environment with [ArgoCD](https://argo-cd.readthedocs.io/en/stable/), but can be used in any scenario.
 
+## Scenarios
+- You have files from a build or process that you want to store in a repository post-build
+- You need to programmatically make changes to a file in your repository post-build
+
+In either case, if you want to write back to the repository contents as an automated step without requiring users to do so.
+
 ## Steps
 This composite action performs the following steps:
 

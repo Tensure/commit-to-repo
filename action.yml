@@ -56,6 +56,11 @@ runs:
         echo "Attempting to use Github App credentials..."
         echo "GITHUB_TOKEN=${{ steps.app-token.outputs.token }}" >> ${GITHUB_ENV}
 
+    - name: Get Short SHA
+      shell: bash
+      id: short-sha
+      run: echo "SHA_VALUE=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
     - name: Validate Destination Directory Doesn't Exist
       shell: bash
       run: |
@@ -102,4 +107,5 @@ runs:
       shell: bash
       working-directory: ${{ inputs.github-repository }}
       run: |
-        git commit -m "Patched in ${{ github.repository }}@${GITHUB_SHA}" && git push origin
+        REPO_LOWER=$(echo "${{ github.repository }}" | awk '{print tolower($0)}')
+        git commit -m "patched in ${REPO_LOWER}@${GITHUB_SHA::7}" && git push origin

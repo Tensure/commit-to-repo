@@ -70,12 +70,14 @@ runs:
         rm -rf ${{ inputs.github-repository }}
         git clone ${BRANCH} https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git
 
-        # change directory to repo created
-        cd ${{ inputs.github-repository }}
-
     - name: Add Files
       shell: bash
       run: |
+        # change directory to repo created
+        cd ${{ inputs.github-repository }}
+
+        ls -latr
+        ls -latr ../
 
         # make sure path exists
         mkdir -p "${{ inputs.path }}"

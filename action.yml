@@ -1,5 +1,9 @@
 name: 'Commit To Repo'
 description: 'Commits local files specified to a repository.'
+author: 'Tensure'
+branding:
+  icon: 'git-commit'
+  color: 'blue'
 inputs:
   branch:
     description: 'An optional repository branch to checkout and commit to. Will use whatever the default branch of the destination repo is, if not specified.'

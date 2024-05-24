@@ -131,7 +131,7 @@ Prerequisites to this example require:
 ```
 
 ## Help
-If you are experiencing errors with this action, see any of the known errors below.
+If you are experiencing errors with this action, see any of the known issues below.
 
 ### No Such File Or Directory
 Most likely the file you are requesting to be copied is not in the path you've specified. Try adding an `ls -latr` step in your workflow to deduce if that file is actaully present.

@@ -56,10 +56,9 @@ runs:
         echo "Attempting to use Github App credentials..."
         echo "GITHUB_TOKEN=${{ steps.app-token.outputs.token }}" >> ${GITHUB_ENV}
 
-    - name: Clone Destination Repo, Add, & Commit Files
+    - name: Clone Destination Repo
       shell: bash
       run: |
-
         # set variables
         REPO="${{ inputs.github-owner }}/${{ inputs.github-repository }}"
         BRANCH=""
@@ -74,6 +73,10 @@ runs:
         # change directory to repo created
         cd ${{ inputs.github-repository }}
 
+    - name: Add Files
+      shell: bash
+      run: |
+
         # make sure path exists
         mkdir -p "${{ inputs.path }}"
 
@@ -83,6 +86,8 @@ runs:
           git add ${{ inputs.path }}/${FILE}
         done <<< '${{ inputs.files }}'
 
-        # commit and push
+    - name: Commit Changes
+      shell: bash
+      run: |
         git commit -m "Patched in ${{ github.repository }}:${GITHUB_SHA}"
         git push origin

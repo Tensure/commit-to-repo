@@ -102,4 +102,4 @@ runs:
       shell: bash
       working-directory: ${{ inputs.github-repository }}
       run: |
-        git commit -m "Patched in ${{ github.repository }}:${GITHUB_SHA}" && git push origin
+        git commit -m "Patched in ${{ github.repository }}@${GITHUB_SHA}" && git push origin

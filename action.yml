@@ -23,6 +23,7 @@ inputs:
   github-app-private-key:
     description: 'The private key for a Github App. Do not provide if github-pat-token is provided.'
     required: false
+    default: ''
   github-owner:
     description: 'The Github owner of the repository.'
     required: true
@@ -103,9 +104,12 @@ runs:
       run: |
         # loop over files
         while IFS= read -r FILE; do
-          cp ../${FILE} ${{ inputs.path }}/$(basename ${FILE})
-          git add ${{ inputs.path }}/${FILE}
-        done <<< '${{ inputs.files }}'
+          FROM="../${FILE}";
+          TO="${{ inputs.path }}/$(basename ${FILE})";
+          echo "Processing '${FROM}' to '${TO}'...";
+          cp ${FROM} ${TO}
+          git add ${TO}
+        done <<< '${{ inputs.files }}';
 
     - name: Commit Changes
       shell: bash

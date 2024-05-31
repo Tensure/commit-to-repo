@@ -10,7 +10,7 @@ inputs:
     required: false
     default: ''
   files:
-    description: 'A list of local files to commit.'
+    description: 'A list of local files to commit. Paths are relative to the root of the base working directory.'
     required: true
   github-pat:
     description: 'A custom token to use.'
@@ -103,7 +103,7 @@ runs:
       run: |
         # loop over files
         while IFS= read -r FILE; do
-          cp ../${FILE} ${{ inputs.path }}/${FILE}
+          cp ../${FILE} ${{ inputs.path }}/$(basename ${FILE})
           git add ${{ inputs.path }}/${FILE}
         done <<< '${{ inputs.files }}'
 
